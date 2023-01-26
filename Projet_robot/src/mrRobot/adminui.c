@@ -1,7 +1,9 @@
 #include <stdio.h>
 #include <stdbool.h>
+#include <stddef.h>
 #include "adminui.h"
 #include "defs.h"
+#include "pilot.h"
 
 static bool_e running = FALSE;
 
@@ -18,7 +20,7 @@ static void AdminUI_display();
 
 /*-----------------------PUBLIC FUNCTIONS-----------------------*/
 extern void AdminUI_new(){
-	//Pilot_start();
+	//
 }
 
 extern void AdminUI_free(){
@@ -55,16 +57,25 @@ static void AdminUI_captureChoice(){
 
 static void AdminUI_askMvt(Direction direction){
 	switch(direction){
-			case LEFT :		AdminUI_askMvt(LEFT);		break;
-			case RIGHT :	AdminUI_askMvt(RIGHT);		break;
-			case FORWARD :	AdminUI_askMvt(FORWARD);	break;
-			case BACKWARD :	AdminUI_askMvt(BACKWARD);	break;
-			default : 									break;
+			case LEFT :
+				Pilot_run(EVENT_SET_VELOCITY, AdminUI_translate(LEFT));
+				break;
+			case RIGHT :
+				Pilot_run(EVENT_SET_VELOCITY, AdminUI_translate(RIGHT));
+				break;
+			case FORWARD :
+				Pilot_run(EVENT_SET_VELOCITY, AdminUI_translate(FORWARD));
+				break;
+			case BACKWARD :
+				Pilot_run(EVENT_SET_VELOCITY, AdminUI_translate(BACKWARD));
+				break;
+			default :
+				break;
 		}
 }
 
 static VelocityVector AdminUI_translate(Direction direction){
-	VelocityVector vel = {direction, 0}; //TODO : which value for power ?
+	VelocityVector vel = {direction, 100};
 	return vel;
 }
 
@@ -73,6 +84,7 @@ static void AdminUI_ask4Log(){
 }
 
 static void AdminUI_askClearLog(){
+	AdminUI_eraseLog();
 	system("@cls||clear");
 }
 

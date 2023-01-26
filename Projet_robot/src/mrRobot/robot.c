@@ -1,9 +1,11 @@
 #include "robot.h"
 #include "prose.h"
 #include "defs.h"
+#include <stdio.h>
 #include <math.h>
 #include <stdint.h>
 #include <stddef.h>
+#include <stdlib.h>
 
 #define LEFT_MOTOR MD
 #define RIGHT_MOTOR MA
@@ -80,8 +82,9 @@ static RobotMotors Robot_init_motors(LegoMotor right_motor_port, LegoMotor left_
 static void Robot_new(){
 	RobotMotors robotMotors = Robot_init_motors(right_motor_port, left_motor_port);
 	RobotSensors robotSensors = Robot_init_sensors(luminosity_sensor_port, contact_sensor_port);
-	Robot robot = {robotSensors, robotMotors};
-	pRobot = malloc(sizeof(robot));;
+	pRobot = (Robot *)malloc(sizeof(Robot));
+	pRobot->sensors = robotSensors;
+	pRobot->motors = robotMotors;
 }
 
 static void Robot_free(){

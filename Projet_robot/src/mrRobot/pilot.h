@@ -40,7 +40,8 @@
 #include "robot.h"
 
 typedef enum {LEFT=0, RIGHT, FORWARD, BACKWARD, STOP} Direction;
-typedef enum {PILOT_INIT=0, PILOT_IDLE, PILOT_RUN, PILOT_EXIT} pilot_state_e;
+typedef enum {PILOT_IDLE, PILOT_RUN, PILOT_EXIT} pilot_state_e;
+typedef enum {EVENT_SET_VELOCITY=0, EVENT_CHECK, EVENT_STOP} pilot_event_e;
     
 typedef struct
 {
@@ -96,6 +97,8 @@ extern PilotSensors Pilot_getState();
  * @brief description 
  */
 extern void Pilot_check();
+
+extern void Pilot_run(pilot_event_e event, VelocityVector vel);
 
 #endif /* PILOT_H */
 
