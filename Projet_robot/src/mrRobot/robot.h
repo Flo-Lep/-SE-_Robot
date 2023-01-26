@@ -76,7 +76,7 @@ extern void Robot_stop();
  * @brief return the speed of the robot (positive average of the right's and left's current wheel power) 
  * @return speed of the robot (beetween 0 and 100)
  */
-extern uint8_t Robot_getRobotSpeed();
+extern int Robot_getRobotSpeed();
 
 /**
  * Robot_getSensorState

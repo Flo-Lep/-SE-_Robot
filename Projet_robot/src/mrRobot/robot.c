@@ -12,7 +12,7 @@
 #define FLOOR_SENSOR S2
 
 static char address[] = "127.0.0.1";
-static uint32_t port = 12345;
+static int port = 12345;
 static LegoMotor right_motor_port = RIGHT_MOTOR;
 static LegoMotor left_motor_port = LEFT_MOTOR;
 static LegoSensor luminosity_sensor_port = LIGHT_SENSOR;
@@ -35,12 +35,12 @@ extern void Robot_stop(){
 	Robot_free();
 }
 
-extern uint8_t Robot_getRobotSpeed(){
-	uint8_t speed;
+extern int Robot_getRobotSpeed(){
+	int speed;
 	Robot robot = *pRobot;
 	Cmd m1 = Motor_getCmd(robot.motors.right_motor);
 	Cmd m2 = Motor_getCmd(robot.motors.left_motor);
-	speed = (uint8_t)((abs(m1)+abs(m2))/2);
+	speed = (int)((abs(m1)+abs(m2))/2);
 	return speed;
 }
 
@@ -81,8 +81,7 @@ static void Robot_new(){
 	RobotMotors robotMotors = Robot_init_motors(right_motor_port, left_motor_port);
 	RobotSensors robotSensors = Robot_init_sensors(luminosity_sensor_port, contact_sensor_port);
 	Robot robot = {robotSensors, robotMotors};
-	malloc(sizeof(robot));
-	pRobot = &robot;
+	pRobot = malloc(sizeof(robot));;
 }
 
 static void Robot_free(){

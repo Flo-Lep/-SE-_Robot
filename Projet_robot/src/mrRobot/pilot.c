@@ -70,8 +70,7 @@ static void Pilot_new(){
 	VelocityVector velocity_vector = Pilot_init_velocity_vector(init_direction, init_power);
 	PilotSensors pilot_sensors = Pilot_init_sensors(init_speed, init_collision, init_luminosity);
 	Pilot pilot = {velocity_vector, pilot_sensors};
-	malloc(sizeof(pilot));
-	pPilot = &pilot;
+	pPilot = malloc(sizeof(pilot));
 }
 
 static void Pilot_free(){
