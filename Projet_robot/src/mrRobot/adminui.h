@@ -45,6 +45,7 @@ typedef enum
 	TURN_LEFT='q',
 	MOVE_FORWARD='z',
 	MOVE_BACKWARD='s',
+	STOP_MOVING=' ',
 	ERASE_LOGS='e',
 	DISPLAY_ROBOT='r',
 } keyboard_e;

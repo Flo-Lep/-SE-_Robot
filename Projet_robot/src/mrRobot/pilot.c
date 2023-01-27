@@ -41,14 +41,19 @@ extern void Pilot_setVelocity(VelocityVector vel){
 }
 
 extern PilotSensors Pilot_getState(){
-	Pilot pilot = *pPilot;
-	return pilot.sensors;
+	pPilot->sensors.speed = Robot_getRobotSpeed();
+	pPilot->sensors.collision = Robot_getSensorState().collision;
+	pPilot->sensors.luminosity = Robot_getSensorState().luminosity;
+	return pPilot->sensors;
 }
 
 extern void Pilot_check(){
 	bool_e bump = Pilot_hasBumped();
 	if(bump){
+		VelocityVector vel = {STOP,0};
+		Pilot_sendMvt(vel);
 		pilot_state = PILOT_IDLE;
+
 	}
 }
 
@@ -111,6 +116,7 @@ static void Pilot_sendMvt(VelocityVector vel){
 		case RIGHT :	Robot_setWheelsVelocity(vel.power, -vel.power);		break;
 		case FORWARD :	Robot_setWheelsVelocity(vel.power, vel.power);		break;
 		case BACKWARD :	Robot_setWheelsVelocity(-vel.power, -vel.power);	break;
+		case STOP :		Robot_setWheelsVelocity(0, 0);						break;
 		default:	printf("ERROR : wrong direction provided in pilot");	break;
 	}
 }

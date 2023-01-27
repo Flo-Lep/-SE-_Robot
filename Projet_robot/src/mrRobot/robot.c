@@ -33,8 +33,8 @@ extern void Robot_start(){
 }
 
 extern void Robot_stop(){
-	ProSE_Intox_close();
 	Robot_free();
+	ProSE_Intox_close();
 }
 
 extern int Robot_getRobotSpeed(){

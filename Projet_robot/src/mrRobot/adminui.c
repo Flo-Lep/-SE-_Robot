@@ -48,29 +48,22 @@ static void AdminUI_captureChoice(){
 		case TURN_LEFT :		AdminUI_askMvt(LEFT);		break;
 		case MOVE_FORWARD :		AdminUI_askMvt(FORWARD);	break;
 		case MOVE_BACKWARD :	AdminUI_askMvt(BACKWARD);	break;
+		case STOP_MOVING :		AdminUI_askMvt(STOP);		break;
 		case ERASE_LOGS :		AdminUI_askClearLog();		break;
 		case DISPLAY_ROBOT :	AdminUI_ask4Log();			break;
 		case EXIT :				AdminUI_quit();				break;
-		default :				printf("Wrong command");	break;
+		default :				printf("Wrong commands\n");	break;
 	}
 }
 
 static void AdminUI_askMvt(Direction direction){
 	switch(direction){
-			case LEFT :
-				Pilot_run(EVENT_SET_VELOCITY, AdminUI_translate(LEFT));
-				break;
-			case RIGHT :
-				Pilot_run(EVENT_SET_VELOCITY, AdminUI_translate(RIGHT));
-				break;
-			case FORWARD :
-				Pilot_run(EVENT_SET_VELOCITY, AdminUI_translate(FORWARD));
-				break;
-			case BACKWARD :
-				Pilot_run(EVENT_SET_VELOCITY, AdminUI_translate(BACKWARD));
-				break;
-			default :
-				break;
+			case LEFT :			Pilot_run(EVENT_SET_VELOCITY, AdminUI_translate(LEFT));		break;
+			case RIGHT :		Pilot_run(EVENT_SET_VELOCITY, AdminUI_translate(RIGHT));	break;
+			case FORWARD :		Pilot_run(EVENT_SET_VELOCITY, AdminUI_translate(FORWARD));	break;
+			case BACKWARD :		Pilot_run(EVENT_SET_VELOCITY, AdminUI_translate(BACKWARD));	break;
+			case STOP :			Pilot_run(EVENT_SET_VELOCITY, AdminUI_translate(STOP));		break;
+			default :																		break;
 		}
 }
 
@@ -80,21 +73,25 @@ static VelocityVector AdminUI_translate(Direction direction){
 }
 
 static void AdminUI_ask4Log(){
-	printf("Asking for logs...");
+	Pilot_run(EVENT_CHECK, AdminUI_translate(STOP));
+	PilotSensors logs = Pilot_getState();
+	printf("Robot status :\n");
+	printf("Collision : %d\n", logs.collision);
+	printf("Luminosity : %f\n", logs.luminosity);
+	printf("Speed : %d\n", logs.speed);
 }
 
 static void AdminUI_askClearLog(){
 	AdminUI_eraseLog();
-	system("@cls||clear");
 }
 
 static void AdminUI_eraseLog(){
-	//erase the log file
-	printf("Erasing logs...");
+	system("@cls||clear");
 }
 
 static void AdminUI_quit(){
 	printf("\n");
+	printf("Exiting ROBOT CONTROLLER...\n");
 	system("stty -cbreak");
 	system("stty echo");
 	running = FALSE;
@@ -106,7 +103,6 @@ static void AdminUI_run(){
 		AdminUI_display();
 		AdminUI_captureChoice();
 	}
-	AdminUI_stop();
 }
 
 static void AdminUI_display(){
